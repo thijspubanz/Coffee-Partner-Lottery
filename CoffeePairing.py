@@ -3,13 +3,21 @@ import csv
 import random
 import copy
 import os
+from dotenv import load_dotenv
+from form_api import export_form_data_to_csv
+
+# Load environmental variables
+load_dotenv()
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
 
 # header names in the CSV file (name and e-mail of participants)
-header_name = "Your name:"
-header_email = "Your e-mail:"
+header_name = "Name"
+header_email = "Email"
+
+# Write answers to csv in the right format
+export_form_data_to_csv(header_name, header_email)
 
 # path to TXT file that stores the pairings of this round
 new_pairs_txt = "Coffee Partner Lottery new pairs.txt"
