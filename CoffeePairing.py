@@ -20,28 +20,28 @@ header_email = "Email"
 export_form_data_to_csv(header_name, header_email)
 
 # path to TXT file that stores the pairings of this round
-new_pairs_txt = "Coffee Partner Lottery new pairs.txt"
+new_groups_txt = "Coffee Partner Lottery new groups.txt"
 
 # path to CSV file that stores the pairings of this round
-new_pairs_csv = "Coffee Partner Lottery new pairs.csv"
+new_groups_csv = "Coffee Partner Lottery new groups.csv"
 
 # path to CSV file that stores all pairings (to avoid repetition)
-all_pairs_csv = "Coffee Partner Lottery all pairs.csv"
+all_groups_csv = "Coffee Partner Lottery all groups.csv"
         
-# init set of old pairs
-opairs = set()
+# init set of old groups
+ogroups = set()
 
 DELIMITER=','
 
 # load all previous pairings (to avoid redundancies)
-if os.path.exists(all_pairs_csv):
-    with open(all_pairs_csv, "r") as file:
+if os.path.exists(all_groups_csv):
+    with open(all_groups_csv, "r") as file:
         csvreader = csv.reader(file, delimiter=DELIMITER)
         for row in csvreader:
             group = []
             for i in range(0,len(row)):
                 group.append(row[i])                        
-            opairs.add(tuple(group))
+            ogroups.add(tuple(group))
 
 # load participant's data
 formdata = pd.read_csv(participants_csv, sep=DELIMITER)
@@ -49,63 +49,95 @@ formdata = pd.read_csv(participants_csv, sep=DELIMITER)
 # create duplicate-free list of participants
 participants = list(set(formdata[header_email]))
 
- # init set of new pairs
-npairs = set()
+ # init set of new groups
+ngroups = set()
 
 # running set of participants
 nparticipants = copy.deepcopy(participants)
 
+# Ask the user to reset the csv file of all groups
+reset_all_pairs = input("Do you want to reset the CSV file of all previous groups? (y/n): ")
+if reset_all_pairs.lower() == "y":
+    with open(all_groups_csv, "w") as file:
+        file.write("")
+    print("All groups CSV file reset.")
+elif reset_all_pairs.lower() == "n":
+    print("All groups CSV file not reset.")
+else:
+    print("Invalid input. All groups CSV file not reset. Exiting.")
+    exit(1)
+
+# Ask the user the desired group size (max = total participants - 2 such that there will always be a minimum of 2 groups)
+group_size = input("Enter the desired group size: ")
+
+# Try to convert input to integer, else set to default value of 2
+try:
+    group_size = int(group_size)
+except ValueError:
+    group_size = 2
+    print(f"Invalid input. Set to default value of {group_size}.")
+
+# Check if group size is too large or too small
+if group_size > len(participants)-2:
+    group_size = len(participants)-2
+    print(f"Group size too large. Set to {group_size}.")
+elif group_size < 2:
+    group_size = 2
+    print(f"Group size too small. Set to {group_size}.")
+else:
+    print(f"Group size set to {group_size}.")
+
 # Boolean flag to check if new pairing has been found
-new_pairs_found = False
+new_groups_found = False
 
 # try creating new pairing until successful
-while not new_pairs_found:   # to do: add a maximum number of tries
-  
-    # if odd number of participants, create one triple, then pairs
-    if len(participants)%2 != 0:
-        
-        # take three random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
-    
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
-        
-        p3 = random.choice(nparticipants)
-        nparticipants.remove(p3)
-        
-        # create alphabetically sorted list of participants
-        plist = [p1, p2, p3]
+group_forming_failsafe_max = 1000
+group_forming_failsafe_counter = 0
+while not new_groups_found:
+    # if group size doesn't fit to number of participants, create a group of the remaining participants and then make other groups
+    remaining_participants = len(participants) % group_size
+    if remaining_participants != 0:
+        # Create list of participants for the remaining group
+        plist = []
+        for i in range(remaining_participants):
+            p = random.choice(nparticipants)
+            nparticipants.remove(p)
+            plist.append(p)
+            
+        # Sort the list of participants alphabetically
         plist.sort()
                         
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+        # Add alphabetically sorted list to set of groups
+        ngroups.add(tuple(plist))
 
   
     # while still participants left to pair...
     while len(nparticipants) > 0:
+        # take group_size random participants from list of participants
+        plist = []
+        for i in range(group_size):
+            p = random.choice(nparticipants)
+            nparticipants.remove(p)
+            plist.append(p)
 
-        # take two random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
-    
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
-                
-        # create alphabetically sorted list of participants
-        plist = [p1, p2]
+        # Sort the list of participants alphabetically
         plist.sort()
                         
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+        # Add alphabetically sorted list to set of groups
+        ngroups.add(tuple(plist))
 
  
-    # check if all new pairs are indeed new, else reset
-    if npairs.isdisjoint(opairs):
-        new_pairs_found = True
+    # check if all new groups are indeed new, else reset
+    if ngroups.isdisjoint(ogroups):
+        new_groups_found = True
     else:
-        npairs = set()
+        ngroups = set()
         nparticipants = copy.deepcopy(participants)
+        group_forming_failsafe_counter += 1
+        if group_forming_failsafe_counter > group_forming_failsafe_max:
+            print(f"Failed to find new groups after {group_forming_failsafe_max} tries. Exiting.")
+            exit(1)
+
 
 
 # assemble output for printout
@@ -115,50 +147,50 @@ output_string += "------------------------\n"
 output_string += "Today's coffee partners:\n"
 output_string += "------------------------\n"
 
-for pair in npairs:
-    pair = list(pair)
+for group in ngroups:
+    group = list(group)
     output_string += "* "
-    for i in range(0,len(pair)):
-        name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]} ({pair[i]})"
-        if i < len(pair)-1:
-            output_string += name_email_pair + ", "
+    for i in range(0,len(group)):
+        name_email_group = f"{formdata[formdata[header_email] == group[i]].iloc[0][header_name]} ({group[i]})"
+        if i < len(group)-1:
+            output_string += name_email_group + ", "
         else:
-            output_string += name_email_pair + "\n"
+            output_string += name_email_group + "\n"
     
 # write output to console
 print(output_string)
 
 # write output into text file for later use
-with open(new_pairs_txt, "wb") as file:
+with open(new_groups_txt, "wb") as file:
     file.write(output_string.encode("utf8"))
 
-# write new pairs into CSV file (for e.g. use in MailMerge)
-with open(new_pairs_csv, "w") as file:
+# write new groups into CSV file (for e.g. use in MailMerge)
+with open(new_groups_csv, "w") as file:
     header = ["name1", "email1", "name2", "email2", "name3", "email3"]
     file.write(DELIMITER.join(header) + "\n")
-    for pair in npairs:
-        pair = list(pair)
-        for i in range(0,len(pair)):
-            name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]}{DELIMITER} {pair[i]}"
-            if i < len(pair)-1:
-                file.write(name_email_pair + DELIMITER + " ")
+    for group in ngroups:
+        group = list(group)
+        for i in range(0,len(group)):
+            name_email_group = f"{formdata[formdata[header_email] == group[i]].iloc[0][header_name]}{DELIMITER} {group[i]}"
+            if i < len(group)-1:
+                file.write(name_email_group + DELIMITER + " ")
             else:
-                file.write(name_email_pair + "\n")
+                file.write(name_email_group + "\n")
                 
-# append pairs to history file
-if os.path.exists(all_pairs_csv):
+# append groups to history file
+if os.path.exists(all_groups_csv):
     mode = "a"
 else:
     mode = "w"
 
-with open(all_pairs_csv, mode) as file:
-    for pair in npairs:
-        pair = list(pair)
-        for i in range(0,len(pair)):
-            if i < len(pair)-1:
-                file.write(pair[i] + DELIMITER)
+with open(all_groups_csv, mode) as file:
+    for group in ngroups:
+        group = list(group)
+        for i in range(0,len(group)):
+            if i < len(group)-1:
+                file.write(group[i] + DELIMITER)
             else:
-                file.write(pair[i] + "\n")
+                file.write(group[i] + "\n")
 
 
              
