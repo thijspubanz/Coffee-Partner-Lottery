@@ -3,12 +3,27 @@ import csv
 import random
 import copy
 import os
+import sys
 from dotenv import load_dotenv
 from form_api import export_form_data_to_csv
 from conversation_starters import get_random_conversation_starter
+from instructions import get_setup_instructions, get_usage_instructions
 
 # Load environmental variables
 load_dotenv()
+
+# Check for command line arguments
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--help" or sys.argv[1] == "-h":
+        print(get_setup_instructions())
+        print(get_usage_instructions())
+        sys.exit(0)
+    elif sys.argv[1] == "--setup":
+        print(get_setup_instructions())
+        sys.exit(0)
+    elif sys.argv[1] == "--usage":
+        print(get_usage_instructions())
+        sys.exit(0)
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
@@ -28,6 +43,16 @@ new_groups_csv = "Coffee Partner Lottery new groups.csv"
 
 # path to CSV file that stores all pairings (to avoid repetition)
 all_groups_csv = "Coffee Partner Lottery all groups.csv"
+
+# Display instructions prompt
+print("\nWelcome to Coffee Partner Lottery!")
+print("Need instructions? Type 'y' for yes, or any other key to continue.")
+show_instructions = input("Show instructions? (y/n): ")
+if show_instructions.lower() == 'y':
+    print(get_setup_instructions())
+    print(get_usage_instructions())
+    print("\nPress Enter to continue with the program...")
+    input()
         
 # init set of old groups
 ogroups = set()
@@ -44,11 +69,35 @@ if os.path.exists(all_groups_csv):
                 group.append(row[i])                        
             ogroups.add(tuple(group))
 
-# load participant's data
-formdata = pd.read_csv(participants_csv, sep=DELIMITER)
+# Check if participants CSV file exists
+if not os.path.exists(participants_csv):
+    print(f"\nERROR: Could not find '{participants_csv}'")
+    print("Please make sure you've downloaded the participant responses as described in the setup instructions.")
+    print("For instructions, run the program with '--setup' flag.")
+    print("\nWould you like to see the setup instructions now? (y/n)")
+    show_setup = input("> ")
+    if show_setup.lower() == 'y':
+        print(get_setup_instructions())
+    sys.exit(1)
 
-# create duplicate-free list of participants
-participants = list(set(formdata[header_email]))
+try:
+    # load participant's data
+    formdata = pd.read_csv(participants_csv, sep=DELIMITER)
+    
+    # Check if required columns exist
+    if header_name not in formdata.columns or header_email not in formdata.columns:
+        print(f"\nERROR: The CSV file does not contain the required columns ({header_name}, {header_email}).")
+        print("Please ensure your form data is formatted correctly as described in the setup instructions.")
+        sys.exit(1)
+    
+    # create duplicate-free list of participants
+    participants = list(set(formdata[header_email]))
+    
+    print(f"\nSuccessfully loaded {len(participants)} participants.")
+except Exception as e:
+    print(f"\nERROR: Could not process '{participants_csv}': {str(e)}")
+    print("Please ensure your CSV file is formatted correctly.")
+    sys.exit(1)
 
  # init set of new groups
 ngroups = set()
