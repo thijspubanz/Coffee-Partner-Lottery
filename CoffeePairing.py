@@ -5,6 +5,7 @@ import copy
 import os
 from dotenv import load_dotenv
 from form_api import export_form_data_to_csv
+from conversation_starters import get_random_conversation_starter
 
 # Load environmental variables
 load_dotenv()
@@ -140,6 +141,27 @@ while not new_groups_found:
 
 
 
+# Ask the user for what type of conversation starter they want
+print("\nWhat type of conversation starter would you like?")
+print("1. Joke")
+print("2. Question")
+print("3. Debate topic")
+print("4. Random (mix of all types)")
+starter_choice = input("Enter your choice (1-4): ")
+
+# Set conversation starter type based on user input
+if starter_choice == "1":
+    starter_type = "joke"
+elif starter_choice == "2":
+    starter_type = "question"
+elif starter_choice == "3":
+    starter_type = "debate"
+else:
+    starter_type = None  # Random selection
+
+# Get a conversation starter
+conversation_starter = get_random_conversation_starter(starter_type)
+
 # assemble output for printout
 output_string = ""
 
@@ -156,6 +178,12 @@ for group in ngroups:
             output_string += name_email_group + ", "
         else:
             output_string += name_email_group + "\n"
+
+# Add conversation starter to output
+output_string += "\n------------------------\n"
+output_string += "Conversation starter:\n"
+output_string += "------------------------\n"
+output_string += conversation_starter + "\n"
     
 # write output to console
 print(output_string)
@@ -166,16 +194,21 @@ with open(new_groups_txt, "wb") as file:
 
 # write new groups into CSV file (for e.g. use in MailMerge)
 with open(new_groups_csv, "w") as file:
-    header = ["name1", "email1", "name2", "email2", "name3", "email3"]
+    header = ["name1", "email1", "name2", "email2", "name3", "email3", "conversation_starter"]
     file.write(DELIMITER.join(header) + "\n")
     for group in ngroups:
         group = list(group)
+        row_data = ""
         for i in range(0,len(group)):
             name_email_group = f"{formdata[formdata[header_email] == group[i]].iloc[0][header_name]}{DELIMITER} {group[i]}"
             if i < len(group)-1:
-                file.write(name_email_group + DELIMITER + " ")
+                row_data += name_email_group + DELIMITER + " "
             else:
-                file.write(name_email_group + "\n")
+                row_data += name_email_group
+        
+        # Add conversation starter to the row
+        row_data += DELIMITER + " " + conversation_starter + "\n"
+        file.write(row_data)
                 
 # append groups to history file
 if os.path.exists(all_groups_csv):
