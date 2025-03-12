@@ -1,11 +1,41 @@
-------------------------
-Today's coffee partners:
-------------------------
-* Seyedeh Fatemeh (S.f.ghafarijafari@students.uu.nl), Kim Baker (kim.baker@email.com), Thijs Rutger Fabian Pubanz (thijspubanz1997@gmail.com)
-* Alice Smith (alice.smith@email.com), Bob Smith (bob.smith@email.com), John Doe (john.doe@email.com)
-* Ehab Wasel (ehah@klfdsah.com), Eve Miller (eve.miller@email.com), no one  (noone)_@gks.com )
+----------------------------------------
+TODAY'S COFFEE PARTNER GROUPS
+----------------------------------------
 
-------------------------
-Conversation starter:
-------------------------
-Joke: What do you call a parade of rabbits hopping backwards? A receding hare-line.
+GROUP 1:
+----------------------------------------
+Name                           | Email                         
+----------------------------------------
+John Doe                       | john.doe@email.com            
+Kim Baker                      | kim.baker@email.com           
+----------------------------------------
+
+GROUP 2:
+----------------------------------------
+Name                           | Email                         
+----------------------------------------
+Alice Smith                    | alice.smith@email.com         
+Eve Miller                     | eve.miller@email.com          
+----------------------------------------
+
+GROUP 3:
+----------------------------------------
+Name                           | Email                         
+----------------------------------------
+Bob Smith                      | bob.smith@email.com           
+no one                         | noone)_@gks.com               
+----------------------------------------
+
+GROUP 4:
+----------------------------------------
+Name                           | Email                         
+----------------------------------------
+Seyedeh Fatemeh                | S.f.ghafarijafari@students.uu.nl
+Ehab Wasel                     | ehah@klfdsah.com              
+Thijs Rutger Fabian Pubanz     | thijspubanz1997@gmail.com     
+----------------------------------------
+
+----------------------------------------
+CONVERSATION STARTER:
+----------------------------------------
+Question: What's something you've learned in the last week?

@@ -1,0 +1,66 @@
+===== MESSAGES FOR ALL GROUPS =====
+
+===== GROUP 1 =====
+Participants: John Doe and Kim Baker
+Emails: john.doe@email.com, kim.baker@email.com
+
+Hello John Doe and Kim Baker!
+
+You've been matched for a CaféConnect chat! 
+
+Please arrange a time to meet that works for everyone in your group.
+
+To help break the ice, here's a conversation starter:
+Question: What's something you've learned in the last week?
+
+Enjoy your coffee chat!
+
+
+===== GROUP 2 =====
+Participants: Alice Smith and Eve Miller
+Emails: alice.smith@email.com, eve.miller@email.com
+
+Hello Alice Smith and Eve Miller!
+
+You've been matched for a CaféConnect chat! 
+
+Please arrange a time to meet that works for everyone in your group.
+
+To help break the ice, here's a conversation starter:
+Question: What's something you've learned in the last week?
+
+Enjoy your coffee chat!
+
+
+===== GROUP 3 =====
+Participants: Bob Smith and no one 
+Emails: bob.smith@email.com, noone)_@gks.com 
+
+Hello Bob Smith and no one !
+
+You've been matched for a CaféConnect chat! 
+
+Please arrange a time to meet that works for everyone in your group.
+
+To help break the ice, here's a conversation starter:
+Question: What's something you've learned in the last week?
+
+Enjoy your coffee chat!
+
+
+===== GROUP 4 =====
+Participants: Seyedeh Fatemeh, Ehab Wasel, and Thijs Rutger Fabian Pubanz
+Emails: S.f.ghafarijafari@students.uu.nl, ehah@klfdsah.com, thijspubanz1997@gmail.com
+
+Hello Seyedeh Fatemeh, Ehab Wasel, and Thijs Rutger Fabian Pubanz!
+
+You've been matched for a CaféConnect chat! 
+
+Please arrange a time to meet that works for everyone in your group.
+
+To help break the ice, here's a conversation starter:
+Question: What's something you've learned in the last week?
+
+Enjoy your coffee chat!
+
+

@@ -6,7 +6,7 @@ import csv
 
 def get_form_answers_dictionary():
     # Get credentials from environment variable
-    google_credentials = os.getenv('google_credentials')
+    google_credentials = os.getenv('GOOGLE_CREDENTIALS')
     scopes = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
     # Parse the credentials JSON string
@@ -16,7 +16,7 @@ def get_form_answers_dictionary():
     )
 
     # Build the service object
-    spreadsheet_id = os.getenv('spreadsheet_id')
+    spreadsheet_id = os.getenv('SPREADSHEET_ID')
     range_name = "Form Responses 1"
 
     service = build("sheets", "v4", credentials=creds)

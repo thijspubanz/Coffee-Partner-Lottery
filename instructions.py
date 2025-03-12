@@ -1,4 +1,3 @@
-
 """
 This module contains instructions for users on how to fill out the form and download the CSV file.
 """
@@ -9,7 +8,7 @@ def get_setup_instructions():
     """
     instructions = """
 ==========================================================
-COFFEE PARTNER LOTTERY - SETUP INSTRUCTIONS
+CAFÉCONNECT - SETUP INSTRUCTIONS
 ==========================================================
 
 1. CREATE AND SET UP THE FORM:
@@ -52,7 +51,7 @@ def get_usage_instructions():
     """
     instructions = """
 ==========================================================
-USING THE COFFEE PARTNER LOTTERY
+USING CAFÉCONNECT
 ==========================================================
 
 1. RESET OPTIONS:
@@ -63,6 +62,7 @@ USING THE COFFEE PARTNER LOTTERY
 2. GROUP SIZE:
    - Enter the desired number of people per group (minimum 2)
    - The program will automatically adjust if your number is too large or small
+   - You can set a default group size in the config.json file
 
 3. CONVERSATION STARTER TYPE:
    - Choose the type of conversation starter:
@@ -80,7 +80,7 @@ USING THE COFFEE PARTNER LOTTERY
 5. SHARING RESULTS:
    - Copy from the text file to share in email or messaging platforms
    - Use the CSV with mail merge tools to send personalized emails
-   
+
 ==========================================================
 """
     return instructions
